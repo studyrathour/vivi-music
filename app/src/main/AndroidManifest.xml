@@ -193,10 +193,10 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.music.vivi.widget.PLAY_PAUSE" />
-                <action android:name="com.music.vivi.widget.LIKE" />
-                <action android:name="com.music.vivi.widget.PLAY_SONG" />
-                <action android:name="com.music.vivi.widget.PLAY_QUEUE_ITEM" />
+                <action android:name="com.songify.suraj.widget.PLAY_PAUSE" />
+                <action android:name="com.songify.suraj.widget.LIKE" />
+                <action android:name="com.songify.suraj.widget.PLAY_SONG" />
+                <action android:name="com.songify.suraj.widget.PLAY_QUEUE_ITEM" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"

@@ -12,11 +12,11 @@ plugins {
 }
 
 android {
-    namespace = "com.music.vivi"
+    namespace = "com.songify.suraj"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.vivi.vivimusic"
+        applicationId = "com.songify.suraj"
         minSdk = 26
         targetSdk = 36
         versionCode = 21 //62 //21
