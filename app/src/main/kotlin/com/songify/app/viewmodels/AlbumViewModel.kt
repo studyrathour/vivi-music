@@ -1,0 +1,105 @@
+package com.songify.app.viewmodels
+
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.music.innertube.YouTube
+import com.music.innertube.models.AlbumItem
+import com.songify.app.db.MusicDatabase
+import com.songify.app.utils.Wikipedia
+import com.songify.app.utils.reportException
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import javax.inject.Inject
+
+@HiltViewModel
+class AlbumViewModel
+@Inject
+constructor(
+    private val database: MusicDatabase,
+    savedStateHandle: SavedStateHandle,
+) : ViewModel() {
+    private val _albumId = MutableStateFlow(savedStateHandle.get<String>("albumId"))
+    val albumId: StateFlow<String?> = _albumId.asStateFlow()
+    
+    val playlistId = MutableStateFlow("")
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val albumWithSongs = _albumId.filterNotNull().flatMapLatest { id ->
+            database.albumWithSongs(id)
+        }.stateIn(viewModelScope, SharingStarted.Eagerly, null)
+    var otherVersions = MutableStateFlow<List<AlbumItem>>(emptyList())
+    var releasesForYou = MutableStateFlow<List<AlbumItem>>(emptyList())
+
+    private val _albumDescription = MutableStateFlow<String?>(null)
+    val albumDescription = _albumDescription.asStateFlow()
+
+    private val _isDescriptionLoading = MutableStateFlow(false)
+    val isDescriptionLoading = _isDescriptionLoading.asStateFlow()
+
+    init {
+        // Reactive Wikipedia Fetching
+        viewModelScope.launch(Dispatchers.IO) {
+            albumWithSongs.collect { album ->
+                if (album != null) {
+                    if (album.album.description != null) {
+                        _albumDescription.value = album.album.description
+                    } else if (_albumDescription.value == null) {
+                        _isDescriptionLoading.value = true
+                        val artistName = album.artists.firstOrNull()?.name
+                        val description = Wikipedia.fetchAlbumInfo(album.album.title, artistName)
+                        if (description != null) {
+                            _albumDescription.value = description
+                            database.query {
+                                update(album.album.copy(description = description))
+                            }
+                        }
+                        _isDescriptionLoading.value = false
+                    }
+                }
+            }
+        }
+
+        // Network Refresh with direct YouTube calls
+        viewModelScope.launch(Dispatchers.IO) {
+            _albumId.collect { id ->
+                if (id == null) return@collect
+                val album = database.album(id).first()
+                YouTube.album(id).onSuccess { it ->
+                    playlistId.value = it.album.playlistId
+                    otherVersions.value = it.otherVersions
+                    releasesForYou.value = it.releasesForYou
+                    database.transaction {
+                        if (album == null) {
+                            insert(it)
+                        } else {
+                            update(album.album, it, album.artists)
+                        }
+                    }
+                }.onFailure {
+                    reportException(it)
+                    if (it.message?.contains("NOT_FOUND") == true) {
+                        database.query {
+                            album?.album?.let(::delete)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun setAlbumId(id: String) {
+        if (_albumId.value != id) {
+            _albumId.value = id
+        }
+    }
+}
