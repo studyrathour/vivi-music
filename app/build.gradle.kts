@@ -12,17 +12,17 @@ plugins {
 }
 
 android {
-    namespace = "com.music.vivi"
+    namespace = "com.songify.app"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.vivi.vivimusic"
+        applicationId = "com.songify.app"
         minSdk = 26
         targetSdk = 36
         versionCode = 21 //62 //21
         versionName = "5.0.3"
 
-        testInstrumentationRunner = "com.music.vivi.CustomTestRunner"
+        testInstrumentationRunner = "com.songify.app.CustomTestRunner"
         vectorDrawables.useSupportLibrary = true
 
         buildConfigField("String", "LASTFM_API_KEY", "\"${System.getenv("LASTFM_API_KEY") ?: ""}\"")
