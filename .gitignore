@@ -1,5 +1,5 @@
 # Built application files
-*.apk
+# *.apk
 *.aar
 *.ap_
 *.aab
@@ -86,7 +86,7 @@ lint/tmp/
 /app/release/output-metadata.json
 
 .kotlin
-app/release
+# app/release
 output-metadata.json
 
 # VS Code
