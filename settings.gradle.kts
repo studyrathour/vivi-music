@@ -15,7 +15,7 @@ dependencyResolutionManagement {
 //     id("org.gradle.toolchains.foojay-resolver-convention") version("1.0.0")
 // }
 
-rootProject.name = "vivimusic"
+rootProject.name = "Songify"
 include(":app")
 include(":innertube")
 include(":kugou")

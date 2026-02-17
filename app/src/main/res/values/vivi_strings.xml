@@ -429,8 +429,8 @@
     <string name="disabled">Disabled</string>
     <string name="sign_out">Sign out</string>
 
-    <string name="vivi_music">VIVI MUSIC</string>
-    <string name="vivi_music_beta_update">Vivi Music Beta Update</string>
+    <string name="vivi_music">Songify</string>
+    <string name="vivi_music_beta_update">Songify Beta Update</string>
     <string name="recheck">Recheck</string>
     <string name="changelog_for_version">Changelog for %1$s</string>
     <string name="available">Available</string>
@@ -455,7 +455,7 @@
     <string name="top">Top</string>
     <string name="center_option">Center</string>
 
-    <string name="vivi_music_title">VIVI MUSIC</string>
+    <string name="vivi_music_title">Songify</string>
     <string name="update_section">UPDATE</string>
     <string name="developer_section">DEVELOPER</string>
     <string name="app_info_section">APP INFO</string>
@@ -622,7 +622,7 @@
     <string name="high_refresh_rate">High Refresh Rate</string>
     <string name="high_refresh_rate_desc">Enable 120Hz/Peak refresh rate for smoother animations</string>
 
-    <string name="developer_name">VIVIDH P ASHOKAN</string>
+    <string name="developer_name">Suraj Singh Rathour</string>
     <string name="collaborator_section">COLLABORATOR</string>
     <string name="collaborator_tboyke">T-Boyke</string>
     <string name="collaborator_role">Collaborator</string>
@@ -914,7 +914,7 @@
     <string name="song_title_fallback">Song Title</string>
     <string name="artist_fallback">Artist</string>
     <string name="listen_on_youtube_music">Listen on YouTube Music</string>
-    <string name="visit_vivimusic">Visit Vivimusic</string>
+    <string name="visit_vivimusic">Visit Songify</string>
     <string name="lastfm_account">Last.fm Account</string>
     <string name="not_logged_in_fallback">Not logged in</string>
     <string name="tertiary_color_style">Tertiary Color Style</string>
